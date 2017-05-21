@@ -1,0 +1,30 @@
+extends layout
+
+block content
+
+  form(method="post" action("/userInformation"))
+    .form-group
+      input(type="text" name="firstName" maxlength="20" class="form-control" placeholder="First Name")
+    .form-group
+      input(type="text" name="lastName" maxlength="30" class="form-control" placeholder="Last Name")
+    .form-group
+      input(type="number" name="phoneNr" maxlength="10" class="form-control" placeholder="Phone number")
+    .form-group
+      input(type="text" name="adress" maxlength="50" class="form-control" placeholder="Adress")
+    .form-group
+      input(type="number" name="zipCode" maxlength="5" class="form-control" placeholder="Zip Code")
+    .form-group
+      input(type="text" name="email" maxlength="60" class="form-control" placeholder="Email adress")
+    .form-group
+      input(type="submit" name="Boka!")
+
+  if userInfo
+    ul
+      li= userInfo.firstName
+      li= userInfo.lastName
+      li= userInfo.phoneNr
+      li= userInfo.adress
+      li= userInfo.zipCode
+      li= userInfo.email
+  if errorInfo
+    p= errorInfo
