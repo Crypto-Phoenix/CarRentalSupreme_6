@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const path = require("path");
 
-const url = "mongodb://maegz:Zoltan1@ds137441.mlab.com:37441/car_rental_app";
+const url = "mongodb://maegz:test123@ds137441.mlab.com:37441/car_rental_app";
 const app = express();
 const PORT = 3000;
 
