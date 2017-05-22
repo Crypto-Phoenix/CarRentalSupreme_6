@@ -7,7 +7,8 @@ const Car = new Schema({
   seats:    { type: Number,   required: [ true, "Must know seats" ] },
   gearbox:  { type: Boolean,  required: [ true, "Must know gearbox" ] },
   railing:  { type: Boolean,  required: [ true, "Must know railing" ] },
-  price:    { type: Number,   required: [ true, "Must know price" ] }
+  price:    { type: Number,   required: [ true, "Must know price" ] },
+  booked:	{type: Boolean,	default: true}
 }, { timestamps: true });
 
 module.exports = mongoose.model("Car", Car);

@@ -21,6 +21,13 @@ module.exports = (Car, User) => {
     });
   });
 
+ router.get("/booked", (req, res) => {
+    Car.find({}, (err, cars) => {
+      console.log("Booked Cars!");
+      res.render("booked", { allCars: cars, title: "BOOKED" });
+    });
+  });
+
   router.post("/userInformation", (req, res) => {
     let newUser = new User(req.body);
 
@@ -37,5 +44,10 @@ module.exports = (Car, User) => {
     });
   });
 
+  router.get('/', (req, res) => {
+    Movie.find({}, (error, results) =>{ 
+    res.json(results);
+  });
+});
   return router;
 }

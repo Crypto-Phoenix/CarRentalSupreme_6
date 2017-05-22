@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  if allCars
+    ul
+      each car in allCars
+        li= car.brand + ", " + car.booked
