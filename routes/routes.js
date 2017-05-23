@@ -2,8 +2,13 @@ const router = require("express").Router();
 
 module.exports = (Car, User) => {
 
+  //Olika tester, ej klart
   router.get("/", (req, res) => {
-    res.render("main", { title: "Main!" });
+   // res.render("main", { title: "Main!" });
+      //Car.find({}, (error, results) =>{ 
+       User.find({}, (error, results) =>{ 
+    res.json(results);
+    });
   });
 
   router.get("/cars", (req, res) => {
@@ -20,11 +25,18 @@ module.exports = (Car, User) => {
       res.render("userInformation", { title: "User info!!!!" });
     });
   });
-
+//Ej klart!//Fredrick
  router.get("/booked", (req, res) => {
     Car.find({}, (err, cars) => {
-      console.log("Booked Cars!");
-      res.render("booked", { allCars: cars, title: "BOOKED" });
+      var CarBookedBy = cars[2].bookedBy;
+      User.find({}, (err, users) => {
+        var UserbookedBy = users[0]._id;
+        var name;
+       // if(CarBookedBy===UserbookedBy)
+          name=users[0].firstName +" "+users[0].lastName ;
+     console.log("Booked Cars! "+ CarBookedBy +" " +UserbookedBy +" "+name);
+      res.render("booked", {  title: "BOOKED", boo: cars, name});
+       });
     });
   });
 
@@ -44,9 +56,27 @@ module.exports = (Car, User) => {
     });
   });
 
-  router.get('/', (req, res) => {
-    Movie.find({}, (error, results) =>{ 
-    res.json(results);
+ 
+ //Ej klart//Fredrick
+  router.patch('/:id', (req, res) => {
+  Car.findByIdAndUpdate(req.params.id,
+  //User.findByIdAndUpdate(req.params.id,  
+  {
+    //booked: req.body.booked,
+    //bookedFr: req.body.bookedFr,
+    //bookedTo: req.body.bookedTo
+    bookedBy: req.body.bookedBy
+  } ,{new: true} 
+  ,(error, result) =>{
+    if(error)res.send(error);
+    res.send(result);
+  });
+});
+  //delete
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove(req.params.id, (error, result) =>{
+    if(error)res.send(error);
+    res.send(result + "Successfully removed!");
   });
 });
   return router;

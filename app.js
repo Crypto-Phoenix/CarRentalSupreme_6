@@ -7,6 +7,8 @@ const url = "mongodb://maegz:test123@ds137441.mlab.com:37441/car_rental_app";
 const app = express();
 const PORT = 3000;
 
+var moment = require('moment');
+app.locals.moment = require('moment');
 
 const Car = require("./models/Car.js");
 const User = require("./models/User.js");
