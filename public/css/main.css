@@ -1,4 +1,5 @@
 footer {
+	text-align: center;
 	background-color: #f8f8f8;
 }
 
@@ -22,3 +23,25 @@ footer {
 .jumbotron {
   padding: 0 0 0 0;
 }
+
+.user {
+  border: 0px;
+  padding-top: 10px;
+}
+
+#user-form {
+  margin: 20 20 20 20;
+}
+
+input {
+  width: 30%;
+  padding: 12px 20px;
+  border: none;
+  border-bottom: 2px solid black;
+  outline: none;
+}
+
+input:focus {
+  border: 3px solid black;
+}
+
