@@ -1,3 +1,7 @@
+footer {
+	background-color: #f8f8f8;
+}
+
 /* Navigation */
 
 .navbar .navbar-nav {
@@ -18,4 +22,3 @@
 .jumbotron {
   padding: 0 0 0 0;
 }
-  
