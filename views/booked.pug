@@ -1,14 +1,9 @@
 extends layout
 block content
  h1 Booked Cars #{moment().format('YYYY-MM-DD')}
- - var bookedTo = " to ";
- - var bookedFr = " Booked from ";
- - var NotBooked = "Not Booked";
-   
+
+   h4
+    p
     ul
-      each car in boo
-       if car.booked
-        //-li= car.brand + ", " + bookedFr + moment(car.bookedFr).format('YYYY-MM-DD') + " "+ bookedTo + moment(car.bookedTo).format('YYYY-MM-DD')+ " by "+ users[1].firstName + " " +users[1].lastName
-        li= car.brand + ", " + bookedFr + moment(car.bookedFr).format('YYYY-MM-DD') + " "+ bookedTo + moment(car.bookedTo).format('YYYY-MM-DD')+ " by "+ name
-       else if !car.booked
-          li= car.brand + ", " + NotBooked
+     each word in bookedCarByPerson
+       li=word
