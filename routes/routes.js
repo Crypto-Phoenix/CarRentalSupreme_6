@@ -1,14 +1,15 @@
 const router = require("express").Router();
+var moment = require('moment');
+//app.locals.moment = require('moment');
 
 module.exports = (Car, User) => {
 
-  //Olika tester, ej klart
   router.get("/", (req, res) => {
-   // res.render("main", { title: "Main!" });
-      //Car.find({}, (error, results) =>{ 
-       User.find({}, (error, results) =>{ 
-    res.json(results);
-    });
+    res.render("main", { title: "Main!" });
+     //Car.find({}, (error, results) =>{ 
+     //  User.find({}, (error, results) =>{ 
+    //res.json(results);
+    //});
   });
 
   router.get("/cars", (req, res) => {
@@ -25,17 +26,32 @@ module.exports = (Car, User) => {
       res.render("userInformation", { title: "User info!!!!" });
     });
   });
-//Ej klart!//Fredrick
+
+/* Check if a car i booked and if so print this and date and person*/
  router.get("/booked", (req, res) => {
     Car.find({}, (err, cars) => {
-      var CarBookedBy = cars[2].bookedBy;
       User.find({}, (err, users) => {
-        var UserbookedBy = users[0]._id;
-        var name;
-       // if(CarBookedBy===UserbookedBy)
-          name=users[0].firstName +" "+users[0].lastName ;
-     console.log("Booked Cars! "+ CarBookedBy +" " +UserbookedBy +" "+name);
-      res.render("booked", {  title: "BOOKED", boo: cars, name});
+        var bookedCarByPerson = [];
+        var tmp;
+        for (var i in cars)
+        {
+          //Get id from car of booked car
+          var tmpCar= cars[i].bookedBy;
+          for(var j in users){
+            //get id of user
+            tmp=users[j]._id;
+            //Check if user and id has equality and exclude undefined
+            if(tmp==tmpCar && tmp!=undefined)
+            {
+              bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+ 
+                moment(cars[i].bookedFr).format('YYYY-MM-DD') +" to "+ 
+                moment(cars[i].bookedFr).format('YYYY-MM-DD') +" by "+
+                users[j].firstName+" "+users[j].lastName);
+            }
+            else if(tmp!=tmpCar && tmp==undefined) bookedCarByPerson.push("No cars is booked");
+          }
+        }
+      res.render("booked", {  title: "BOOKED", bookedCarByPerson});
        });
     });
   });
@@ -56,15 +72,29 @@ module.exports = (Car, User) => {
     });
   });
 
+router.post('/newCar', (req, res) => {
+var car = new Car(req.body);
+car.save((error, results)=>{
+  if(error) res.send(error.errors.title.message);
+  res.send(results);
+});
+});
  
- //Ej klart//Fredrick
+
   router.patch('/:id', (req, res) => {
   Car.findByIdAndUpdate(req.params.id,
   //User.findByIdAndUpdate(req.params.id,  
   {
-    //booked: req.body.booked,
-    //bookedFr: req.body.bookedFr,
-    //bookedTo: req.body.bookedTo
+   /*
+    brand: req.body.brand
+    model: req.body.model
+    seats: req.body.seats
+    gearbox: req.body.gearbox
+    railing: req.body.railing
+    price: req.body.price*/
+    booked: req.body.booked,
+    bookedFr: req.body.bookedFr,
+    bookedTo: req.body.bookedTo,
     bookedBy: req.body.bookedBy
   } ,{new: true} 
   ,(error, result) =>{
