@@ -27,6 +27,16 @@ module.exports = (Car, User) => {
     });
   });
 
+  router.get('/avboka', (req,res) => {
+    var tmp;
+  Car.find()
+  .where('booked').equals('true')
+  .exec((error, result) => {
+    tmp=result;
+    res.json(tmp);
+  });
+});
+
 /* Check if a car i booked and if so print this and date and person*/
  router.get("/booked", (req, res) => {
     Car.find({}, (err, cars) => {
@@ -55,6 +65,8 @@ module.exports = (Car, User) => {
        });
     });
   });
+
+
 
   router.post("/userInformation", (req, res) => {
     let newUser = new User(req.body);
