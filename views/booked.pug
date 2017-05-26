@@ -6,4 +6,6 @@ block content
     p
     ul
      each word in bookedCarByPerson
-       li=word
+      //form#user-form(method="post" action("/unbooked"))
+      li=word 
+       //input(type="submit" name="Avboka!")
