@@ -5,11 +5,11 @@ var moment = require('moment');
 module.exports = (Car, User) => {
 
   router.get("/", (req, res) => {
-    res.render("main", { title: "Main!" });
-     //Car.find({}, (error, results) =>{ 
+    //res.render("main", { title: "Main!" });
+     Car.find({}, (error, results) =>{ 
      //  User.find({}, (error, results) =>{ 
-    //res.json(results);
-    //});
+    res.json(results);
+    });
   });
 
   router.get("/cars", (req, res) => {
@@ -27,7 +27,7 @@ module.exports = (Car, User) => {
     });
   });
 
-  router.get('/avboka', (req,res) => {
+  router.get('/cancel', (req,res) => {
     var tmp;
   Car.find()
   .where('booked').equals('true')
