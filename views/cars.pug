@@ -12,21 +12,22 @@ block content
         th Takräcke
         th Pris/dag
       each car in allCars
-        tr
-          td
-            input(name= car._id type="radio")
-          td= car.brand
-          td= car.model
-          td= car.seats
-          if car.gearbox
-            td Ja
-          else
-            td Nej
-          if car.railing
-            td Ja
-          else
-            td Nej
-          td= car.price
+        if !car.booked
+          tr
+            td
+              input(name= car._id type="radio")
+            td= car.brand
+            td= car.model
+            td= car.seats
+            if car.gearbox
+              td Ja
+            else
+              td Nej
+            if car.railing
+              td Ja
+            else
+              td Nej
+            td= car.price
     input#submitCar(type="submit" value="Välj bil")
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")

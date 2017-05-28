@@ -39,12 +39,15 @@ module.exports = (Car, User) => {
     let newUser = new User(req.body);
 
     newUser.save((err) => {
-      console.log(chosenCarByUser);
       if (!err) {
         Car.findByIdAndUpdate(chosenCarByUser, {
-          bookedFr: req.body.bookedFr,
-          bookedTo: req.body.bookedTo,
-          bookedBy: req.body.bookedBy,
+          // bookedFr: req.body.bookedFr,
+          // bookedTo: req.body.bookedTo,
+
+          /* TILLFÄLLIGA DATUM */
+          bookedFr: "2017-05-27T00:00:00.000Z",
+          bookedTo: "2017-05-27T00:00:00.000Z",
+          bookedBy: newUser._id,
           booked: true
           }, (err, result) => {
             if (err) console.log(err);
