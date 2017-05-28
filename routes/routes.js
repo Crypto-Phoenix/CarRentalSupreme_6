@@ -91,43 +91,38 @@ module.exports = (Car, User) => {
     });
   });
 
+  return router;
+};
 
 
-  router.post("/userInformation", (req, res) => {
-    let newUser = new User(req.body);
+    // router.patch('/userInformation', (req, res) => {
+    //   console.log("gveoingebroi");
+    //   Car.findByIdAndUpdate(bookedCar,
+    // //     //User.findByIdAndUpdate(req.params.id,
+    //     {
+    //       /*
+    //       brand: req.body.brand
+    //       model: req.body.model
+    //       seats: req.body.seats
+    //       gearbox: req.body.gearbox
+    //       railing: req.body.railing
+    //       price: req.body.price
+    //       */
+    //       booked: true,
+    //     } //, {new: true}
+    //     ,(error, result) =>{
+    //       if(error)res.send(error);
+    //       console.log(result);
+    //       res.send(result);
+    //     });
+    //   });
+    // console.log(req.body.radioButton);
+    //
+    // Car.find({}, (err, cars) => {
+    //   console.log(cars[this.booked]);
+    // });
 
-    newUser.save((err) => {
-      if (!err) {
-        console.log("Success!");
-        console.log(newUser);
-        res.render("userInformation", { userInfo: newUser, title: "User info!" });
-      } else {
-        console.log("Uh-oh!");
-        console.log(err);
-        res.render("userInformation", { errorInfo: err, title: "Something went wrong." });
-      }
-    });
-  });
 
-router.post('/newCar', (req, res) => {
-var car = new Car(req.body);
-car.save((error, results)=>{
-  if(error) res.send(error.errors.title.message);
-  res.send(results);
-});
-});
- 
-
-  router.patch('/:id', (req, res) => {
-  Car.findByIdAndUpdate(req.params.id,
-  //User.findByIdAndUpdate(req.params.id,  
-  {
-   /*
-    brand: req.body.brand
-    model: req.body.model
-    seats: req.body.seats
-    gearbox: req.body.gearbox
-    railing: req.body.railing
 //   router.get('/cancel', (req,res) => {
 //     var tmp;
 //   Car.find()
