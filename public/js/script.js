@@ -5,7 +5,7 @@ $(document).ready(function() {
   $("#submitCar").click((e) => {
     if (!($("input[type=radio]").is(":checked"))) {
       e.preventDefault();
-      alert("Vänligen välj en bil!");
+      alert("Please select a car!");
     }
   });
 });
