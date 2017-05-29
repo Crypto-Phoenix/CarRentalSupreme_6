@@ -3,6 +3,25 @@ footer {
 	background-color: #f8f8f8;
 }
 
+.wrapper {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+#allCars {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#about {
+  text-align: center;
+}
+
+#submitCar {
+  margin-top: 20px;
+  margin-left: 35%;
+}
+
 /* Navigation */
 
 .navbar .navbar-nav {
