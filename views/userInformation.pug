@@ -1,7 +1,15 @@
 extends layout
 
 block content
+
   #wrapper
+
+    if errorMessage
+      h3= errorTitle
+      ul
+        each error in errorMessage
+          li= error
+
     section.user
       form#user-form(method="post" action("/userInformation"))
         .form-group
@@ -19,13 +27,11 @@ block content
         .form-group
           input(type="submit" value="Boka!")
 
-  if userInfo
-    ul
-      li= userInfo.firstName
-      li= userInfo.lastName
-      li= userInfo.phoneNr
-      li= userInfo.adress
-      li= userInfo.zipCode
-      li= userInfo.email
-  if errorInfo
-    p= errorInfo
+    // if userInfo
+    //  ul
+    //  li= userInfo.firstName
+    //  li= userInfo.lastName
+    //  li= userInfo.phoneNr
+    //  li= userInfo.adress
+    //  li= userInfo.zipCode
+    //  li= userInfo.email
