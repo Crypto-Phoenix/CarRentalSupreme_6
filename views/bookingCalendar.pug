@@ -7,14 +7,11 @@ block content
 
   form(method="post" action="/bookingCalendar")
     .form-group
-      .left
-        p From:
-        input#dateFrom(type="text")
+      input#dateFrom(type="text" name="bookedFr" value="From:")
     .form-group
-      .right
-        p To:
-        input#dateTo(type="text")
-    input#submitForm(type="submit" value="Check for available cars!")
+      input#dateTo(type="text" name="bookedTo" value="To:")
+    .form-group
+      input#submitForm(type="submit" value="Check for available cars!")
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
   script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")

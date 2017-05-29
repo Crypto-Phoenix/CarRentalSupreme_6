@@ -5,7 +5,8 @@ var moment = require('moment');
 module.exports = (Car, User, Booking) => {
 
   let chosenCarByUser;
-  // let tmpNonBookedCar;
+  let newDateFr;
+  let newDateTo;
 
   router.get("/", (req, res) => {
     res.render("main", { title: "Main!" });
@@ -21,23 +22,17 @@ module.exports = (Car, User, Booking) => {
   //-----------------------------//
   router.get("/bookingCalendar", (req, res) => {
     console.log("GET /bookingCalendar");
-    // let tmpBookFr = req;
-    // let tmpBookTo;
-    // Car.find({}, (err, cars) => {
-    //   for (let i in cars) {
-    //     if (cars[i].bookedFr == undefined) {
-    //       tmpNonBookedCar = cars[i]._id;
-    //     }
-    //   }
-    // });
     res.render("bookingCalendar", { title: "Booking Calendar" });
   })
   .post("/bookingCalendar", (req, res) => {
-    let newBooking = new Booking(req.body);
-    newBooking.save((err) => {
-      if (err) console.log(err);
-    });
-    console.log(newBooking);
+    let tmpNonBookedCar = [];
+    for (let dates in req.body) {
+      tmpNonBookedCar.push(req.body[dates]);
+    }
+    for (let date in tmpNonBookedCar) {
+      newDateFr = new Date(tmpNonBookedCar[0]);
+      newDateTo = new Date(tmpNonBookedCar[1]);
+    }
     console.log("POST /bookingCalendar -> redirect to cars");
     res.redirect("cars");
   });
@@ -53,10 +48,10 @@ module.exports = (Car, User, Booking) => {
     });
   })
   .post("/cars", (req, res) => {
-    console.log("POST /cars -> redirect to userInformation");
     for (let carId in req.body) {
       chosenCarByUser = carId;
     }
+    console.log("POST /cars -> redirect to userInformation");
     res.redirect("userInformation");
   });
 
@@ -72,28 +67,24 @@ module.exports = (Car, User, Booking) => {
     });
   })
   .post("/userInformation", (req, res) => {
-    console.log("POST /userInformation ??? REDIRECT for verifying?");
     let newUser = new User(req.body);
     newUser.save((err) => {
       if (!err) {
         Car.findByIdAndUpdate(chosenCarByUser, {
-          // bookedFr: req.body.bookedFr,
-          // bookedTo: req.body.bookedTo,
-
-          /* TILLFÄLLIGA DATUM */
-          bookedFr: "2017-05-27T00:00:00.000Z",
-          bookedTo: "2017-05-27T00:00:00.000Z",
+          bookedFr: newDateFr,
+          bookedTo: newDateTo,
           bookedBy: newUser._id,
           booked: true
         },
         (err, result) => {
           if (err) console.log(err);
         });
-        console.log("Success!");
+        console.log("POST /userInformation ??? REDIRECT for verifying?");
         res.render("userInformation", { userInfo: newUser, title: "User info!" });
       } else {
-        // console.log(err);
-        res.render("userInformation", { errorInfo: err, title: "Something went wrong." });
+        let errMessage = err.message.slice(24).split(", ").reverse();
+        let errTitle = "You missed to fill in " + errMessage.length + " field(s).";
+        res.render("userInformation", { errorTitle: errTitle, errorMessage: errMessage, title: "Something went wrong." });
       }
     });
   });
@@ -116,12 +107,12 @@ module.exports = (Car, User, Booking) => {
             tmp = users[j]._id;
             //Check if user and id has equality and exclude undefined
             if (tmp == tmpCar && tmp != undefined) {
-              bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+
-              moment(cars[i].bookedFr).format('YYYY-MM-DD') +" to "+
-              moment(cars[i].bookedFr).format('YYYY-MM-DD') +" by "+
-              users[j].firstName+" "+users[j].lastName);
+              bookedCarByPerson.push("Car: " + cars[i].brand + ". Booked from: " +
+              moment(cars[i].bookedFr).format('YYYY-MM-DD') + " to " +
+              moment(cars[i].bookedFr).format('YYYY-MM-DD') + " by " +
+              users[j].firstName + " " + users[j].lastName);
             }
-            else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars is booked");
+            else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars are booked.");
           }
         }
         res.render("booked", { title: "BOOKED", bookedCarByPerson});

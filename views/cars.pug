@@ -4,13 +4,13 @@ block content
   form(method="post" action("/"))
     table(style="width: 70%")
       tr
-        th Välj bil
-        th Märke
-        th Modell
-        th Antal säten
-        th Växellåda
-        th Takräcke
-        th Pris/dag
+        th Choose Car
+        th Brand
+        th Model
+        th Seats
+        th Gearbox
+        th Railing
+        th Price/day
       each car in allCars
         if !car.booked
           tr
@@ -20,15 +20,15 @@ block content
             td= car.model
             td= car.seats
             if car.gearbox
-              td Ja
+              td Yes
             else
-              td Nej
+              td No
             if car.railing
-              td Ja
+              td Yes
             else
-              td Nej
+              td No
             td= car.price
-    input#submitCar(type="submit" value="Välj bil")
+    input#submitCar(type="submit" value="Choose car")
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
   script(type="text/javascript" src="./public/js/script.js")
