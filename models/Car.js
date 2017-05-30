@@ -8,10 +8,11 @@ const Car = new Schema({
   gearbox:  { type: Boolean,  required: [ true, "Must know gearbox" ] },
   railing:  { type: Boolean,  required: [ true, "Must know railing" ] },
   price:    { type: Number,   required: [ true, "Must know price" ] },
-  booked:	{ type: Boolean,  default: false},
-  bookedFr: { type: Date},
-  bookedTo: {type:Date},
-  bookedBy: {type: String}
+  booked:	  {
+      bookedFr: { type: Date },
+      bookedTo: { type: Date },
+  },
+  bookedBy: { type: String }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Car", Car);

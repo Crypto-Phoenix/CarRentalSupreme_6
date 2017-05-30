@@ -9,21 +9,11 @@ module.exports = (Car, User) => {
 
   //-----------------//
   //    MAIN PAGE    //
-
-  //------------- ---//
- router.get("/", (req, res) => {
-
   //-----------------//
-
-
+  router.get("/", (req, res) => {
     res.render("main", { title: "Main!" });
   });
 
-
-//***********************************
-  /*
-    INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
-  */
 
   //------------------//
   //    ADMIN PAGE    //
@@ -80,7 +70,6 @@ module.exports = (Car, User) => {
     }, (err, cars) => {
       // Show the available cars
       res.render("cars", { allCars: cars, title: "CARS" });
-     // res.json(cars);
     });
   })
   .post("/cars", (req, res) => {
@@ -90,7 +79,6 @@ module.exports = (Car, User) => {
     }
     res.redirect("userInformation");
   });
-
 
 
   //-----------------------------//
@@ -149,81 +137,19 @@ module.exports = (Car, User) => {
             tmp = users[j]._id;
             // Check if user and ID has equality and exclude undefined
             if (tmp == tmpCar && tmp != undefined) {
-
-              bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+
-              moment(cars[i].bookedFr).format('YYYY-MM-DD') +" to "+
-              moment(cars[i].bookedFr).format('YYYY-MM-DD') +" by "+
-              users[j].firstName+" "+users[j].lastName+ " "+cars[i]._id);
-
+              bookedCarByPerson.push("Car: " + cars[i].brand + ". Booked from: " +
+              moment(cars[i].booked.bookedFr).format('YYYY-MM-DD') + " to " +
+              moment(cars[i].booked.bookedTo).format('YYYY-MM-DD') + " by " +
+              users[j].firstName + " " + users[j].lastName);
             }
             else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars are booked.");
           }
         }
         res.render("booked", { title: "BOOKED", bookedCarByPerson});
-
       });
     });
-  })
-.patch("/booked/:id", (req, res) => {
-  for (let i in req.body) {
-    //var tmp = req.body[i];
-    //console.log(tmp);
-       Car.findByIdAndUpdate(req.params.id, 
-      { 
-      bookedBy: "",
-      booked:  {
-      bookedFr: null,
-      bookedTo: null
-    },
-      }, (error, results) => {
-        res.send(results);
-      })
-  }
-  //res.redirect("userInformation");
-  res.render("booked", { title: "BOOKED" });
-});
-
-
-
-
-/*temporära, endast till för Postman etc*/
-
-  router.patch('/:id', (req,res) => {
-    Car.findByIdAndUpdate(req.params.id,
-    {
-      bookedBy: req.body.bookedBy,
-      booked:  {
-      bookedFr: req.body.bookedFr,
-      bookedTo: req.body.bookedTo
-    },
-    },
-    (error, result) => {
-      if(error) res.send(error);
-      res.send(result);
-    });
   });
 
-  router.get("/cf", (req, res) => {
-         Car.find({}, (error, results) =>{ 
-     //  User.find({}, (error, results) =>{ 
-    res.json(results);
-    });
-  });
-    router.get("/ust", (req, res) => {
-    User.find({}, (err, users) => {
-      if (err) console.log(err);
-      console.log(users);
-      res.json(users);
-    });
-  });
-
-    router.post('/newCar', (req, res) => {
-var car = new Car(req.body);
-car.save((error, results)=>{
-  if(error) res.send(error.errors.title.message);
-  res.send(results);
-});
-});
   return router;
 };
 
@@ -268,10 +194,37 @@ car.save((error, results)=>{
 
 
 
+// router.patch('/:id', (req, res) => {
+// -  Car.findByIdAndUpdate(req.params.id,
+// -  //User.findByIdAndUpdate(req.params.id,
+// -  {
+// -   /*
+// -    brand: req.body.brand
+// -    model: req.body.model
+// -    seats: req.body.seats
+// -    gearbox: req.body.gearbox
+// -    railing: req.body.railing
+// -    price: req.body.price*/
+// -    booked: req.body.booked,
+// -    bookedFr: req.body.bookedFr,
+// -    bookedTo: req.body.bookedTo,
+// -    bookedBy: req.body.bookedBy
+// -  } ,{new: true}
+// -  ,(error, result) =>{
+// -    if(error)res.send(error);
+// -    res.send(result);
+// -  });
+// -});
 
 
 
-
+// router.post('/newCar', (req, res) => {
+// var car = new Car(req.body);
+// car.save((error, results)=>{
+//   if(error) res.send(error.errors.title.message);
+//   res.send(results);
+// });
+// });
 //
 //
 //   //delete
