@@ -12,9 +12,9 @@ module.exports = (Car, User) => {
 
   //------------- ---//
  router.get("/", (req, res) => {
-=======
+
   //-----------------//
-  router.get("/", (req, res) => {
+
 
     res.render("main", { title: "Main!" });
   });
@@ -24,7 +24,7 @@ module.exports = (Car, User) => {
   /*
     INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
   */
-=======
+
   //------------------//
   //    ADMIN PAGE    //
   //------------------//
