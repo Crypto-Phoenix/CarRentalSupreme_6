@@ -1,28 +1,26 @@
 extends layout
 block content
-    .wrapper
-     h1 Booked Cars #{moment().format('YYYY-MM-DD')}
-
-
-   h4
+  .wrapper
+    h1 Booked Cars #{moment().format('YYYY-MM-DD')}
+    h4
     p
 
     ul(id="hej")
-     each word in bookedCarByPerson
-      form(action=link method="PATCH" id="reg")
-      li=word
-       input(type ="text" name="booked" value="false")
-       input(type="submit" value ="Avboka")
-       script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
-       script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
-       link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
-       script(type="text/javascript" src="./public/js/cancel.js")
-
-       h4
-        p
-        ul
-         each word in bookedCarByPerson
-          //form#user-form(method="post" action("/unbooked"))
-          li=word 
-           //input(type="submit" name="Avboka!")
+    .wrapper
+      form(method="patch" action=link)
+        table(style="width: 100%")
+          if !bookedCarByPerson
+            p No cars here
+          else
+            each word in bookedCarByPerson
+             - var link = "/booked/" + word._id
+              tr
+                td
+                  input(name="radioCar" type="radio" value= word._id style="width: 10px")
+                td= word
+        input#submitForm(type="submit" value="Avboka")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
+        script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
+        link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
+        script(type="text/javascript" src="./public/js/cancel.js")
 

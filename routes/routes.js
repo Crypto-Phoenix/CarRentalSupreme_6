@@ -10,19 +10,24 @@ module.exports = (Car, User, Booking) => {
   //-----------------//
   //    MAIN PAGE    //
   //------------- ---//
-  router.get("/", (req, res) => {
+/*  router.get("/", (req, res) => {
     res.render("main", { title: "Main!" });
+  });*/
+
+  router.get("/", (req, res) => {
+    //res.render("main", { title: "Main!" });
+     Car.find({}, (error, results) =>{ 
+     //  User.find({}, (error, results) =>{ 
+    res.json(results);
+    });
   });
 
-
-<<<<<<< HEAD
 
 //***********************************
   /*
     INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
   */
-=======
->>>>>>> 85df89d9b28c328cc22cec5c077b49c98b0cebe9
+
   //-----------------------------//
   //    CALENDAR BOOKING PAGE    //
   //-----------------------------//
@@ -132,35 +137,49 @@ module.exports = (Car, User, Booking) => {
           }
         }
         res.render("booked", { title: "BOOKED", bookedCarByPerson});
+
       });
     });
-  });
+  })
+.patch("/booked/:id", (req, res) => {
+  for (let i in req.body) {
+    //var tmp = req.body[i];
+    //console.log(tmp);
+       Car.findByIdAndUpdate(req.params.id, 
+      { 
+      bookedBy: "",
+      booked:  {
+      bookedFr: null,
+      bookedTo: null
+    },
+      }, (error, results) => {
+        res.send(results);
+      })
+  }
+  //res.redirect("userInformation");
+  res.render("booked", { title: "BOOKED" });
+});
+
 
 
 
 /*temporära, endast till för Postman etc*/
-router.patch(':id', (req, res) => {
-  Car.findByIdAndUpdate(req.params.id,
-  //User.findByIdAndUpdate(req.params.id,  
-  {
-   /*
-    brand: req.body.brand
-    model: req.body.model
-    seats: req.body.seats
-    gearbox: req.body.gearbox
-    railing: req.body.railing
-    price: req.body.price*/
-    booked: req.body.booked,
-    bookedFr: req.body.bookedFr,
-    bookedTo: req.body.bookedTo,
-    bookedBy: req.body.bookedBy
-  } ,{new: true} 
-  ,(error, result) =>{
-    if(error)res.send(error);
-    res.send(result);
+
+  router.patch('/:id', (req,res) => {
+    Car.findByIdAndUpdate(req.params.id,
+    {
+      bookedBy: req.body.bookedBy,
+      booked:  {
+      bookedFr: req.body.bookedFr,
+      bookedTo: req.body.bookedTo
+    },
+    },
+    (error, result) => {
+      if(error) res.send(error);
+      res.send(result);
+    });
   });
-});
-  
+
   router.get("/cf", (req, res) => {
          Car.find({}, (error, results) =>{ 
      //  User.find({}, (error, results) =>{ 
@@ -174,6 +193,14 @@ router.patch(':id', (req, res) => {
       res.json(users);
     });
   });
+
+    router.post('/newCar', (req, res) => {
+var car = new Car(req.body);
+car.save((error, results)=>{
+  if(error) res.send(error.errors.title.message);
+  res.send(results);
+});
+});
   return router;
 };
 
@@ -221,13 +248,7 @@ router.patch(':id', (req, res) => {
 
 
 
-// router.post('/newCar', (req, res) => {
-// var car = new Car(req.body);
-// car.save((error, results)=>{
-//   if(error) res.send(error.errors.title.message);
-//   res.send(results);
-// });
-// });
+
 //
 //
 //   //delete

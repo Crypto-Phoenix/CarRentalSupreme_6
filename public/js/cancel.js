@@ -15,21 +15,26 @@ $( "#hej" ).mouseover(function() {
         }, function(){
         $(this).css("background-color", "pink");
     });*/
-
-$( "#hej" ).mouseout(function() {
-//	$(this).css("background-color","white");
-});
+//console.log("hej");
+/*
 $("#hej").on('click','li',function (){
 	//$(this).css("background-color","yellow");
     //alert($(this).text());
     var txt= $(this).text();
     var lastword = txt.split(" ").pop();
-    console.log(lastword);
-    $("#reg").attr("action", "/booked/" +lastword);
-
+    console.log("hej"+lastword);
+   // $("#reg").attr("action", "/booked/" +lastword);
+   //$("#reg").attr("action", lastword);
 //confirm("Press a button!");
 
-
 });
+*/
 
+
+  $("#submitForm").click((e) => {
+
+let t="Tjena!";
+alert(t);
+  e.preventDefault();
+    });
 });
