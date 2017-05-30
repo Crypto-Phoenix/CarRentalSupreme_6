@@ -1,26 +1,20 @@
 extends layout
+
 block content
   .wrapper
     h1 Booked Cars #{moment().format('YYYY-MM-DD')}
-    h4
-    p
-
-    ul(id="hej")
     .wrapper
-      form(method="patch" action=link)
+      form(method="post" action="/booked")
         table(style="width: 100%")
-          if !bookedCarByPerson
-            p No cars here
+          if bookedCarByPerson
+              each car in bookedCarByPerson
+                tr
+                  td= car
           else
-            each word in bookedCarByPerson
-             - var link = "/booked/" + word._id
-              tr
-                td
-                  input(name="radioCar" type="radio" value= word._id style="width: 10px")
-                td= word
-        input#submitForm(type="submit" value="Avboka")
-        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
-        script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
-        link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
-        script(type="text/javascript" src="./public/js/cancel.js")
+            p No cars here
 
+
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
+  script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
+  link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
+  script(type="text/javascript" src="./public/js/cancel.js")

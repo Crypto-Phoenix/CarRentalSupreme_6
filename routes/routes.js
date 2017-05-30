@@ -18,10 +18,8 @@ module.exports = (Car, User) => {
   //------------------//
   //    ADMIN PAGE    //
   //------------------//
-
   router.get("/admin", (req, res) => {
-    Car.find({
-    }, (err, cars) => {
+    Car.find({}, (err, cars) => {
       res.render("admin", { allCars: cars });
     });
   })
@@ -31,11 +29,10 @@ module.exports = (Car, User) => {
       chosenCarByUser = req.body[carId];
     }
     Car.findByIdAndRemove(chosenCarByUser, (err, result) => {
-      if (err)
-        console.log(err); });
-      res.redirect("../admin");
+      if (err) console.log(err);
     });
-
+    res.redirect("../admin");
+  });
 
 
   //-----------------------------//
@@ -126,17 +123,20 @@ module.exports = (Car, User) => {
     Car.find({}, (err, cars) => {
       User.find({}, (err, users) => {
         let bookedCarByPerson = [];
+        let carBookId = [];
         let tmp;
 
         for (let i in cars) {
           // Get ID from car of booked car
           let tmpCar = cars[i].bookedBy;
+          let tmpCarBookId = cars[i]._id;
 
           for (let j in users) {
             // Get ID of user
             tmp = users[j]._id;
             // Check if user and ID has equality and exclude undefined
             if (tmp == tmpCar && tmp != undefined) {
+              carBookId.push(tmpCarBookId);
               bookedCarByPerson.push("Car: " + cars[i].brand + ". Booked from: " +
               moment(cars[i].booked.bookedFr).format('YYYY-MM-DD') + " to " +
               moment(cars[i].booked.bookedTo).format('YYYY-MM-DD') + " by " +
@@ -145,152 +145,34 @@ module.exports = (Car, User) => {
             else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars are booked.");
           }
         }
-        res.render("booked", { title: "BOOKED", bookedCarByPerson});
+        res.render("booked", { title: "BOOKED", bookedCarByPerson, carBookId });
       });
     });
-  })
-  .patch("/booked/:id", (req, res) => {
-    for (let i in req.body) {
-      //var tmp = req.body[i];
-      //console.log(tmp);
-      Car.findByIdAndUpdate(req.params.id, {
-        bookedBy: "",
-        booked:  {
-          bookedFr: null,
-          bookedTo: null
-        }
-      }, (error, results) => {
-        res.send(results);
-      });
-    }
-    //res.redirect("userInformation");
-    res.render("booked", { title: "BOOKED" });
   });
 
-
-
-
-/*temporära, endast till för Postman etc*/
-
-  router.patch('/:id', (req,res) => {
-    Car.findByIdAndUpdate(req.params.id,
-    {
-      bookedBy: req.body.bookedBy,
-      booked:  {
-      bookedFr: req.body.bookedFr,
-      bookedTo: req.body.bookedTo
-    },
-    },
-    (error, result) => {
-      if(error) res.send(error);
-      res.send(result);
-    });
-  });
-
-  router.get("/cf", (req, res) => {
-         Car.find({}, (error, results) =>{
-     //  User.find({}, (error, results) =>{
-    res.json(results);
-    });
-  });
-  router.get("/ust", (req, res) => {
-    User.find({}, (err, users) => {
-      if (err) console.log(err);
-      console.log(users);
-      res.json(users);
-    });
-  });
-
-  router.post('/newCar', (req, res) => {
-    var car = new Car(req.body);
-    car.save((error, results)=>{
-      if(error) res.send(error.errors.title.message);
-      res.send(results);
-    });
-  });
   return router;
-};
+
+}
 
 
-    // router.patch('/userInformation', (req, res) => {
-    //   console.log("gveoingebroi");
-    //   Car.findByIdAndUpdate(bookedCar,
-    // //     //User.findByIdAndUpdate(req.params.id,
-    //     {
-    //       /*
-    //       brand: req.body.brand
-    //       model: req.body.model
-    //       seats: req.body.seats
-    //       gearbox: req.body.gearbox
-    //       railing: req.body.railing
-    //       price: req.body.price
-    //       */
-    //       booked: true,
-    //     } //, {new: true}
-    //     ,(error, result) =>{
-    //       if(error)res.send(error);
-    //       console.log(result);
-    //       res.send(result);
-    //     });
-    //   });
-    // console.log(req.body.radioButton);
-    //
-    // Car.find({}, (err, cars) => {
-    //   console.log(cars[this.booked]);
-    // });
-
-
-//   router.get('/cancel', (req,res) => {
-//     var tmp;
-//   Car.find()
-//   .where('booked').equals('true')
-//   .exec((error, result) => {
-//     tmp=result;
-//     res.json(tmp);
-//   });
-// });
-
-
-
-// router.patch('/:id', (req, res) => {
-// -  Car.findByIdAndUpdate(req.params.id,
-// -  //User.findByIdAndUpdate(req.params.id,
-// -  {
-// -   /*
-// -    brand: req.body.brand
-// -    model: req.body.model
-// -    seats: req.body.seats
-// -    gearbox: req.body.gearbox
-// -    railing: req.body.railing
-// -    price: req.body.price*/
-// -    booked: req.body.booked,
-// -    bookedFr: req.body.bookedFr,
-// -    bookedTo: req.body.bookedTo,
-// -    bookedBy: req.body.bookedBy
-// -  } ,{new: true}
-// -  ,(error, result) =>{
-// -    if(error)res.send(error);
-// -    res.send(result);
-// -  });
-// -});
-
-
-
-// router.post('/newCar', (req, res) => {
-// var car = new Car(req.body);
-// car.save((error, results)=>{
-//   if(error) res.send(error.errors.title.message);
-//   res.send(results);
-// });
-// });
-//
-//
-//   //delete
-// router.delete('/:id', (req, res) => {
-//   User.findByIdAndRemove(req.params.id, (error, result) =>{
-//     if(error)res.send(error);
-//     res.send(result + "Successfully removed!");
-//   });
-// });
-//   return router;
-// }
+  //------------------------------------------//
+  //    REMOVE BOOKED CAR, DOESN'T WORK!!!    //
+  //------------------------------------------//
+  //
+  //
+  // .post("/booked", (req, res) => {
+  //   for (let carId in req.body) {
+  //     chosenCarByUser = req.body[carId];
+  //   }
+  //   console.log(chosenCarByUser);
+  //   // let deleteResult = {};
+  //   // deleteResult["booked"] = true;
+  //   // Car.update({ _id: chosenCarByUser }, { $unset: { deleteResult } });
+  //   Car.findByIdAndUpdate(chosenCarByUser, {
+  //     bookedBy: "",
+  //     booked: {}
+  //   }, (err, results) => {
+  //     if (err) console.log(err);
+  //   });
+  //   res.render("booked", { title: "BOOKED" });
+  // });
