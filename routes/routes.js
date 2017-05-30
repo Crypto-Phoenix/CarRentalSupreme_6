@@ -13,6 +13,7 @@ module.exports = (Car, User, Booking) => {
 
 
 
+//***********************************
   /*
     INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
   */
@@ -50,6 +51,7 @@ module.exports = (Car, User, Booking) => {
     console.log("GET /cars");
     Car.find({}, (err, cars) => {
       res.render("cars", { allCars: cars, title: "CARS" });
+     // res.json(cars);
     });
   })
   .post("/cars", (req, res) => {
@@ -59,6 +61,7 @@ module.exports = (Car, User, Booking) => {
     }
     res.redirect("userInformation");
   });
+
 
 
   //-----------------------------//
@@ -119,7 +122,7 @@ module.exports = (Car, User, Booking) => {
               bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+
               moment(cars[i].bookedFr).format('YYYY-MM-DD') +" to "+
               moment(cars[i].bookedFr).format('YYYY-MM-DD') +" by "+
-              users[j].firstName+" "+users[j].lastName);
+              users[j].firstName+" "+users[j].lastName+ " "+cars[i]._id);
             }
             else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars is booked");
           }
@@ -129,6 +132,44 @@ module.exports = (Car, User, Booking) => {
     });
   });
 
+
+
+/*temporära, endast till för Postman etc*/
+router.patch(':id', (req, res) => {
+  Car.findByIdAndUpdate(req.params.id,
+  //User.findByIdAndUpdate(req.params.id,  
+  {
+   /*
+    brand: req.body.brand
+    model: req.body.model
+    seats: req.body.seats
+    gearbox: req.body.gearbox
+    railing: req.body.railing
+    price: req.body.price*/
+    booked: req.body.booked,
+    bookedFr: req.body.bookedFr,
+    bookedTo: req.body.bookedTo,
+    bookedBy: req.body.bookedBy
+  } ,{new: true} 
+  ,(error, result) =>{
+    if(error)res.send(error);
+    res.send(result);
+  });
+});
+  
+  router.get("/cf", (req, res) => {
+         Car.find({}, (error, results) =>{ 
+     //  User.find({}, (error, results) =>{ 
+    res.json(results);
+    });
+  });
+    router.get("/ust", (req, res) => {
+    User.find({}, (err, users) => {
+      if (err) console.log(err);
+      console.log(users);
+      res.json(users);
+    });
+  });
   return router;
 };
 
@@ -173,27 +214,6 @@ module.exports = (Car, User, Booking) => {
 
 
 
-// router.patch('/:id', (req, res) => {
-// -  Car.findByIdAndUpdate(req.params.id,
-// -  //User.findByIdAndUpdate(req.params.id,
-// -  {
-// -   /*
-// -    brand: req.body.brand
-// -    model: req.body.model
-// -    seats: req.body.seats
-// -    gearbox: req.body.gearbox
-// -    railing: req.body.railing
-// -    price: req.body.price*/
-// -    booked: req.body.booked,
-// -    bookedFr: req.body.bookedFr,
-// -    bookedTo: req.body.bookedTo,
-// -    bookedBy: req.body.bookedBy
-// -  } ,{new: true}
-// -  ,(error, result) =>{
-// -    if(error)res.send(error);
-// -    res.send(result);
-// -  });
-// -});
 
 
 

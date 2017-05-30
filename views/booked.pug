@@ -4,8 +4,14 @@ block content
 
    h4
     p
-    ul
+
+    ul(id="hej")
      each word in bookedCarByPerson
-      //form#user-form(method="post" action("/unbooked"))
-      li=word 
-       //input(type="submit" name="Avboka!")
+      form(action=link method="PATCH" id="reg")
+      li=word
+       input(type ="text" name="booked" value="false")
+       input(type="submit" value ="Avboka")
+       script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
+       script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
+       link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
+       script(type="text/javascript" src="./public/js/cancel.js")
