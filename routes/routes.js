@@ -148,8 +148,66 @@ module.exports = (Car, User) => {
         res.render("booked", { title: "BOOKED", bookedCarByPerson});
       });
     });
+  })
+  .patch("/booked/:id", (req, res) => {
+    for (let i in req.body) {
+      //var tmp = req.body[i];
+      //console.log(tmp);
+      Car.findByIdAndUpdate(req.params.id, {
+        bookedBy: "",
+        booked:  {
+          bookedFr: null,
+          bookedTo: null
+        }
+      }, (error, results) => {
+        res.send(results);
+      });
+    }
+    //res.redirect("userInformation");
+    res.render("booked", { title: "BOOKED" });
   });
 
+
+
+
+/*temporära, endast till för Postman etc*/
+
+  router.patch('/:id', (req,res) => {
+    Car.findByIdAndUpdate(req.params.id,
+    {
+      bookedBy: req.body.bookedBy,
+      booked:  {
+      bookedFr: req.body.bookedFr,
+      bookedTo: req.body.bookedTo
+    },
+    },
+    (error, result) => {
+      if(error) res.send(error);
+      res.send(result);
+    });
+  });
+
+  router.get("/cf", (req, res) => {
+         Car.find({}, (error, results) =>{
+     //  User.find({}, (error, results) =>{
+    res.json(results);
+    });
+  });
+  router.get("/ust", (req, res) => {
+    User.find({}, (err, users) => {
+      if (err) console.log(err);
+      console.log(users);
+      res.json(users);
+    });
+  });
+
+  router.post('/newCar', (req, res) => {
+    var car = new Car(req.body);
+    car.save((error, results)=>{
+      if(error) res.send(error.errors.title.message);
+      res.send(results);
+    });
+  });
   return router;
 };
 
