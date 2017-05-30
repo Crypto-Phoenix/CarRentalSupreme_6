@@ -28,13 +28,16 @@ module.exports = (Car, User, Booking) => {
   })
 
   router.post('/cars/_carId', (req, res) => {
-    db.collection('Cars').deleteOne(
-    { 
-      "_carId" : new mongodb.ObjectId(req.body[carId])
-    }, (error, result) => {
-    
-  });
-});
+    for (let carId in req.body) {
+      // Get ID from user-selected car.
+      chosenCarByUser = req.body[carId];
+    }
+    Car.findByIdAndRemove(chosenCarByUser, (err, result) => { 
+      if (err) 
+        console.log(err); });
+    res.redirect("../admin");
+    });
+
 
 
   //-----------------------------//
