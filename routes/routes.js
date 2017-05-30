@@ -1,45 +1,43 @@
-const router = require("express").Router();
+﻿const router = require("express").Router();
 var moment = require('moment');
-//app.locals.moment = require('moment');
 
 module.exports = (Car, User, Booking) => {
 
   let chosenCarByUser;
-  // let tmpNonBookedCar;
+  let newDateFr;
+  let newDateTo;
 
+  //-----------------//
+  //    MAIN PAGE    //
+  //------------- ---//
   router.get("/", (req, res) => {
     res.render("main", { title: "Main!" });
   });
 
 
+<<<<<<< HEAD
 
 //***********************************
   /*
     INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
   */
+=======
+>>>>>>> 85df89d9b28c328cc22cec5c077b49c98b0cebe9
   //-----------------------------//
   //    CALENDAR BOOKING PAGE    //
   //-----------------------------//
   router.get("/bookingCalendar", (req, res) => {
-    console.log("GET /bookingCalendar");
-    // let tmpBookFr = req;
-    // let tmpBookTo;
-    // Car.find({}, (err, cars) => {
-    //   for (let i in cars) {
-    //     if (cars[i].bookedFr == undefined) {
-    //       tmpNonBookedCar = cars[i]._id;
-    //     }
-    //   }
-    // });
     res.render("bookingCalendar", { title: "Booking Calendar" });
   })
   .post("/bookingCalendar", (req, res) => {
-    let newBooking = new Booking(req.body);
-    newBooking.save((err) => {
-      if (err) console.log(err);
-    });
-    console.log(newBooking);
-    console.log("POST /bookingCalendar -> redirect to cars");
+    let tmpDateChoice = [];
+    for (let dates in req.body) {
+      tmpDateChoice.push(req.body[dates]);
+    }
+    for (let date in tmpDateChoice) {
+      newDateFr = tmpDateChoice[0];
+      newDateTo = tmpDateChoice[1];
+    }
     res.redirect("cars");
   });
 
@@ -48,16 +46,19 @@ module.exports = (Car, User, Booking) => {
   //    CAR BOOKING PAGE    //
   //----------------- ------//
   router.get("/cars", (req, res) => {
-    console.log("GET /cars");
-    Car.find({}, (err, cars) => {
+    // Find all cars that are not booked during the users date choice.
+    Car.find({
+      "booked.bookedFr": { $not: { $gt: newDateFr, $lt: newDateTo } },
+      "booked.bookedTo": { $not: { $gt: newDateFr, $lt: newDateTo } }
+    }, (err, cars) => {
       res.render("cars", { allCars: cars, title: "CARS" });
      // res.json(cars);
     });
   })
   .post("/cars", (req, res) => {
-    console.log("POST /cars -> redirect to userInformation");
     for (let carId in req.body) {
-      chosenCarByUser = carId;
+      // Get ID from user-selected car.
+      chosenCarByUser = req.body[carId];
     }
     res.redirect("userInformation");
   });
@@ -68,35 +69,34 @@ module.exports = (Car, User, Booking) => {
   //    USER INFORMATION PAGE    //
   //-----------------------------//
   router.get("/userInformation", (req, res) => {
-    console.log("GET /userInformation");
     User.find({}, (err, users) => {
-      if (err) console.log(err);
-      res.render("userInformation", { title: "User info!!!!" });
+      res.render("userInformation", { title: "User information" });
     });
   })
   .post("/userInformation", (req, res) => {
-    console.log("POST /userInformation ??? REDIRECT for verifying?");
+    // Create new user.
     let newUser = new User(req.body);
+
+    // If not error, update the chosen car with booking dates
+    // and the users ID.
+    // If error, show the user what went wrong.
     newUser.save((err) => {
       if (!err) {
         Car.findByIdAndUpdate(chosenCarByUser, {
-          // bookedFr: req.body.bookedFr,
-          // bookedTo: req.body.bookedTo,
-
-          /* TILLFÄLLIGA DATUM */
-          bookedFr: "2017-05-27T00:00:00.000Z",
-          bookedTo: "2017-05-27T00:00:00.000Z",
-          bookedBy: newUser._id,
-          booked: true
+          booked: {
+            bookedFr: new Date(newDateFr),
+            bookedTo: new Date(newDateTo)
+          },
+          bookedBy: newUser._id
         },
         (err, result) => {
           if (err) console.log(err);
         });
-        console.log("Success!");
-        res.render("userInformation", { userInfo: newUser, title: "User info!" });
+        res.redirect("booked");
       } else {
-        // console.log(err);
-        res.render("userInformation", { errorInfo: err, title: "Something went wrong." });
+        let errMessage = err.message.slice(24).split(", ").reverse();
+        let errTitle = "You missed to fill in " + errMessage.length + " field(s).";
+        res.render("userInformation", { errorTitle: errTitle, errorMessage: errMessage, title: "Something went wrong." });
       }
     });
   });
@@ -111,20 +111,24 @@ module.exports = (Car, User, Booking) => {
       User.find({}, (err, users) => {
         let bookedCarByPerson = [];
         let tmp;
+
         for (let i in cars) {
           //Get id from car of booked car
           let tmpCar = cars[i].bookedBy;
+
           for (let j in users) {
-            //get id of user
+            //Get id of user
             tmp = users[j]._id;
             //Check if user and id has equality and exclude undefined
             if (tmp == tmpCar && tmp != undefined) {
+
               bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+
               moment(cars[i].bookedFr).format('YYYY-MM-DD') +" to "+
               moment(cars[i].bookedFr).format('YYYY-MM-DD') +" by "+
               users[j].firstName+" "+users[j].lastName+ " "+cars[i]._id);
+
             }
-            else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars is booked");
+            else if (tmp != tmpCar && tmp == undefined) bookedCarByPerson.push("No cars are booked.");
           }
         }
         res.render("booked", { title: "BOOKED", bookedCarByPerson});

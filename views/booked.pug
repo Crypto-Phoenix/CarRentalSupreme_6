@@ -1,6 +1,8 @@
 extends layout
 block content
- h1 Booked Cars #{moment().format('YYYY-MM-DD')}
+    .wrapper
+     h1 Booked Cars #{moment().format('YYYY-MM-DD')}
+
 
    h4
     p
@@ -15,3 +17,12 @@ block content
        script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js")
        link(rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css")
        script(type="text/javascript" src="./public/js/cancel.js")
+
+       h4
+        p
+        ul
+         each word in bookedCarByPerson
+          //form#user-form(method="post" action("/unbooked"))
+          li=word 
+           //input(type="submit" name="Avboka!")
+

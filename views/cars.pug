@@ -1,34 +1,81 @@
 extends layout
 
 block content
+  .wrapper
   form(method="post" action("/"))
-    table(style="width: 70%")
+    table#allCars(style="width: 70%")
       tr
-        th Välj bil
-        th Märke
-        th Modell
-        th Antal säten
-        th Växellåda
-        th Takräcke
-        th Pris/dag
+        th(onclick='sortTable(0)')
+          img(src='public/img/choose.png')
+        th(onclick='sortTable(1)')
+          img(src='public/img/brand.png')
+        th(onclick='sortTable(2)')
+          img(src='public/img/model.png')
+        th(onclick='sortTable(3)')
+          img(src='public/img/seats.png')
+        th(onclick='sortTable(4)')
+          img(src='public/img/gearbox.png')
+        th(onclick='sortTable(5)')
+          img(src='public/img/railing.png')
+        th(onclick='sortTable(6)')
+          img(src='public/img/price.png')
+
       each car in allCars
-        if !car.booked
-          tr
-            td
-              input(name= car._id type="radio")
-            td= car.brand
-            td= car.model
-            td= car.seats
-            if car.gearbox
-              td Ja
-            else
-              td Nej
-            if car.railing
-              td Ja
-            else
-              td Nej
-            td= car.price
-    input#submitCar(type="submit" value="Välj bil")
+        tr
+          td
+            input(name="radioCar" type="radio" value= car._id)
+          td= car.brand
+          td= car.model
+          td= car.seats
+          if car.gearbox
+            td Yes
+          else
+            td No
+          if car.railing
+            td Yes
+          else
+            td No
+          td= car.price
+          //if !car.booked
+    input#submitCar(type="submit" value="Choose car")
+
+    script.
+      function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("allCars");
+      switching = true;
+      dir = "asc";
+      while (switching) {
+      switching = false;
+      rows = table.getElementsByTagName("TR");
+      for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+      shouldSwitch= true;
+      break;
+      }
+      } else if (dir == "desc") {
+      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+      shouldSwitch= true;
+      break;
+      }
+      }
+      }
+      if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+      } else {
+      if (switchcount == 0 && dir == "asc") {
+      dir = "desc";
+      switching = true;
+      }
+      }
+      }
+      }
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
   script(type="text/javascript" src="./public/js/script.js")
