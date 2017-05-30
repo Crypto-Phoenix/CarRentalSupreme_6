@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .wrapper
+  form(method="post" action=("/cars/_carId"))
+    table#allCars(style="width: 70%")
+      tr
+        th Brand
+        th Model
+        th Delete?
+      each car in allCars
+        tr
+          td= car.brand 
+          td= car.model
+          td
+            input(name="radioCar" type="radio" value= car._id)
+          
+    input#deleteCar(type="submit" value="Delete car")   
+ 
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript")
+  script(type="text/javascript" src="./public/js/script.js")

@@ -15,6 +15,28 @@ module.exports = (Car, User, Booking) => {
   });
 
 
+  //-----------------//
+  //    ADMIN PAGE    //
+  //------------- ---//
+
+  router.get("/admin", (req, res) => {
+
+    Car.find({
+    }, (err, cars) => {
+      res.render("admin", { allCars: cars });
+    });
+  })
+
+  router.post('/cars/_carId', (req, res) => {
+    db.collection('Cars').deleteOne(
+    { 
+      "_carId" : new mongodb.ObjectId(req.body[carId])
+    }, (error, result) => {
+    
+  });
+});
+
+
   //-----------------------------//
   //    CALENDAR BOOKING PAGE    //
   //-----------------------------//

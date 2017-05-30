@@ -27,6 +27,11 @@ a#about{
   margin-left: 35%;
 }
 
+#deleteCar {
+  margin-top: 20px;
+  margin-left: 35%;
+}
+
 /* Navigation */
 
 .navbar .navbar-nav {
