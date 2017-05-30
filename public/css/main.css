@@ -1,10 +1,36 @@
 footer {
-	text-align: center;
+  text-align: center;
+  padding: 10px;
+  margin: 0 auto;
 	background-color: #f8f8f8;
+  border-style: solid;
+  border-width: 2px;
+  border-left: none;
+  border-right: none;
+  height: 40px;
+  border-color: lightgrey;
+  margin-top: 50px;
+}
+
+#carcal {
+  margin: 20 20 20 60;
 }
 
 .wrapper {
   margin-top: 20px;
+  margin-left: 20px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  font-size: 15px;
+  font-family: 'Rubik', sans-serif;
+}
+
+h2 {
   margin-left: 20px;
 }
 
@@ -27,6 +53,11 @@ a#about{
   margin-left: 35%;
 }
 
+#deleteCar {
+  margin-top: 20px;
+  margin-left: 35%;
+}
+
 /* Navigation */
 
 .navbar .navbar-nav {
@@ -36,7 +67,7 @@ a#about{
 }
 
 .navbar .navbar-collapse {
-  	text-align: center;
+  text-align: center;
 }
 
 .navbar .navbar-nav a {

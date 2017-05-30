@@ -1,7 +1,7 @@
 ﻿const router = require("express").Router();
 var moment = require('moment');
 
-module.exports = (Car, User, Booking) => {
+module.exports = (Car, User) => {
 
   let chosenCarByUser;
   let newDateFr;
@@ -9,17 +9,14 @@ module.exports = (Car, User, Booking) => {
 
   //-----------------//
   //    MAIN PAGE    //
-  //------------- ---//
-/*  router.get("/", (req, res) => {
-    res.render("main", { title: "Main!" });
-  });*/
 
+  //------------- ---//
+ router.get("/", (req, res) => {
+=======
+  //-----------------//
   router.get("/", (req, res) => {
-    //res.render("main", { title: "Main!" });
-     Car.find({}, (error, results) =>{ 
-     //  User.find({}, (error, results) =>{ 
-    res.json(results);
-    });
+
+    res.render("main", { title: "Main!" });
   });
 
 
@@ -27,6 +24,29 @@ module.exports = (Car, User, Booking) => {
   /*
     INTE FÄRDIG, HJÄLP GÄRNA TILL HÄR!
   */
+=======
+  //------------------//
+  //    ADMIN PAGE    //
+  //------------------//
+
+  router.get("/admin", (req, res) => {
+    Car.find({
+    }, (err, cars) => {
+      res.render("admin", { allCars: cars });
+    });
+  })
+  .post('/cars/_carId', (req, res) => {
+    for (let carId in req.body) {
+      // Get ID from user-selected car.
+      chosenCarByUser = req.body[carId];
+    }
+    Car.findByIdAndRemove(chosenCarByUser, (err, result) => {
+      if (err)
+        console.log(err); });
+      res.redirect("../admin");
+    });
+
+
 
   //-----------------------------//
   //    CALENDAR BOOKING PAGE    //
@@ -35,6 +55,8 @@ module.exports = (Car, User, Booking) => {
     res.render("bookingCalendar", { title: "Booking Calendar" });
   })
   .post("/bookingCalendar", (req, res) => {
+    // Push chosen dates to a temporary array,
+    // then put them in two separate variables.
     let tmpDateChoice = [];
     for (let dates in req.body) {
       tmpDateChoice.push(req.body[dates]);
@@ -49,20 +71,21 @@ module.exports = (Car, User, Booking) => {
 
   //------------------------//
   //    CAR BOOKING PAGE    //
-  //----------------- ------//
+  //------------------------//
   router.get("/cars", (req, res) => {
     // Find all cars that are not booked during the users date choice.
     Car.find({
       "booked.bookedFr": { $not: { $gt: newDateFr, $lt: newDateTo } },
       "booked.bookedTo": { $not: { $gt: newDateFr, $lt: newDateTo } }
     }, (err, cars) => {
+      // Show the available cars
       res.render("cars", { allCars: cars, title: "CARS" });
      // res.json(cars);
     });
   })
   .post("/cars", (req, res) => {
+    // Get ID from user selected car.
     for (let carId in req.body) {
-      // Get ID from user-selected car.
       chosenCarByUser = req.body[carId];
     }
     res.redirect("userInformation");
@@ -110,7 +133,7 @@ module.exports = (Car, User, Booking) => {
   //------------------------//
   //    BOOKED CARS PAGE    //
   //------------------------//
-  /* Check if a car i booked and if so print this and date and person*/
+  /* Check if a car i booked and if so print this and date and person */
   router.get("/booked", (req, res) => {
     Car.find({}, (err, cars) => {
       User.find({}, (err, users) => {
@@ -118,13 +141,13 @@ module.exports = (Car, User, Booking) => {
         let tmp;
 
         for (let i in cars) {
-          //Get id from car of booked car
+          // Get ID from car of booked car
           let tmpCar = cars[i].bookedBy;
 
           for (let j in users) {
-            //Get id of user
+            // Get ID of user
             tmp = users[j]._id;
-            //Check if user and id has equality and exclude undefined
+            // Check if user and ID has equality and exclude undefined
             if (tmp == tmpCar && tmp != undefined) {
 
               bookedCarByPerson.push("Car: "+ cars[i].brand+". Booked from: "+
