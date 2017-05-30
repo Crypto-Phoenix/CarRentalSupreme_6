@@ -12,8 +12,7 @@ app.locals.moment = require('moment');
 
 const Car = require("./models/Car.js");
 const User = require("./models/User.js");
-const Booking = require("./models/Booking.js");
-const routes = require("./routes/routes.js")(Car, User, Booking);
+const routes = require("./routes/routes.js")(Car, User);
 
 const db = mongoose.connection;
 
